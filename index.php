@@ -20,33 +20,36 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 		<br>
 
 		<div style="text-align: center;">
-			<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
-				<div style="font-size: 30px;">
+		<?php
+		session_start();
+		if(!isset($_SESSION["username"])){
+
+			echo"<form action=login.php method=\"POST\">
+				<div style=\"font-size: 30px;\">
 					Login
 				</div>
 				<br>
-				Numero Conto
+				Username
 				<br>
-				<input type="text" name="num" placeholder="Numero conto">
-				<br>
-				<br>
-				PIN
-				<br>
-				<input type="password" name="pin" placeholder="PIN">
+				<input type=\"text\" name=\"username\" placeholder=\"Username\">
 				<br>
 				<br>
-				<input type="submit" name="btnLogin" value="Login">
-			</form>
+				Password
+				<br>
+				<input type=\"password\" name=\"password\" placeholder=\"Password\">
+				<br>
+				<br>
+				<input type=\"submit\" name=\"btnLogin\" value=\"Login\">
+			</form>";
+		}
+		else{
+
+			echo("login già effettuato");
+		}
+
+		?>
 		</div>
 
 	</body>
 </html>
 
-
-<?php
-
-
-//controllo login 
-
-
-?>
