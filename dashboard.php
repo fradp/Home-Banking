@@ -59,13 +59,15 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 					$numeroConti = mysqli_num_rows($result);
 					$i=0;
 					$j=1;
+					echo "<form method=post action=menu.php>";
 				    while($rows = mysqli_fetch_assoc($result))
 				    {
 						$ID_ContoCorrente[$i] = $rows["ID_ContoCorrente"];
 						echo "Conto ". $j .": <br><input type=\"submit\" name=\"" . $ID_ContoCorrente[$i] . "\"><br><br>";
 						$i++;
 						$j++;
-					} 
+					}
+					echo "</form>"; 
 				}
 				else
 				{
