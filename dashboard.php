@@ -24,13 +24,13 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 		$dbHost = "127.0.0.1";
 	  	$dbUsername = "admin";
 	  	$dbPassword = "admin";
-	  	$dbName = "band";
+	  	$dbName = "banca";
 
 	  	$conn = mysqli_connect($dbHost, $dbUsername, $dbPassword, $dbName);
 	  	
 		if (!$conn) 
 		{
-	    die("Connection failed: " . mysqli_connect_error());
+	    	die("Connection failed: " . mysqli_connect_error());
 		}
 		else
 		{
@@ -39,13 +39,12 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 			if(isset($_SESSION["username"]))
 			{
 				$username=$_SESSION["username"];
-				$sql1 = "SELECT ID_Utente FROM utente WHERE Username = $username";
-				$result = mysqli_query($conn, $sql1);
+				$sql = "SELECT ID_Utente FROM utente WHERE Username = '". $username."'";
+				$result = mysqli_query($conn, $sql);
+				$rows = mysqli_fetch_assoc($result);
 				if(mysqli_num_rows($result) > 0 )
 				{
-					
-						$ID_Utente = $row["ID_Utente"];
-						
+					$ID_Utente = $rows['ID_Utente'];
 				}
 				else
 				{
@@ -53,22 +52,24 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 				}
 
 				$ID_ContoCorrente[]="";
-				$sql2 = "SELECT ID_ContoCorrente FROM contocorrente INNER JOIN possiede ON ID_Utente=ID_ContoCorrente WHERE ID_Utente = $ID_Utente";
+				$sql2 = "SELECT possiede.ID_ContoCorrente FROM contocorrente INNER JOIN possiede ON possiede.ID_Utente=contocorrente.ID_ContoCorrente WHERE ID_Utente = $ID_Utente";
 				$result = mysqli_query($conn, $sql2);
 				if(mysqli_num_rows($result) > 0 )
 				{
-						$numeroConti = mysqli_num_rows($result);
-						$ID_ContoCorrente[] = $row["ID_ContoCorrente"];
-						
+					$numeroConti = mysqli_num_rows($result);
+					$i=0;
+					$j=1;
+				    while($rows = mysqli_fetch_assoc($result))
+				    {
+						$ID_ContoCorrente[$i] = $rows["ID_ContoCorrente"];
+						echo "Conto ". $j .": <br><input type=\"submit\" name=\"" . $ID_ContoCorrente[$i] . "\"><br><br>";
+						$i++;
+						$j++;
+					} 
 				}
 				else
 				{
 					echo "0 results";
-				}
-
-				for($i=0;$i<$numrtoConti;$i++)
-				{
-					echo"$ID_ContoCorrente[$i]";
 				}
 
 				

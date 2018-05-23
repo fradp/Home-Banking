@@ -44,7 +44,7 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 		}
 		else{
 
-			echo("login già effettuato");
+			header("location:dashboard.php");
 		}
 
 		?>
