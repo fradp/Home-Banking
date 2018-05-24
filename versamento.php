@@ -38,7 +38,17 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 			session_start();
 			if(isset($_SESSION["username"]))
 			{
-
+				if(!isset($_POST["btnVersamento"])){
+					echo"
+					<form method=post action=#>
+						<input type=text name=inputVersamento placeholder='Inserisci importo' required>
+						<input type=submit name=btnVersamento value=Invia>
+					</form>
+				";
+				}
+				else{
+					echo "*bestemmia*";
+				}
 
 			}
 			else
