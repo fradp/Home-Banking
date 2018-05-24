@@ -38,28 +38,8 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 			session_start();
 			if(isset($_SESSION["username"]))
 			{
-				if(!isset($_POST['versamento']) && !isset($_POST['prelievo']) && !isset($_POST['bonifico'])){
-					echo "
-					<form method=post action=#>
-						<input type=submit value=Versamento name=versamento>
-						<input type=submit value=Prelievo name=prelievo>
-						<input type=submit value=Bonifico name=bonifico>
-					</form>
-					";
-				}
-				else{
-					if(isset($_POST['versamento'])){
-						header("location:versamento.php");
-					}
-					else{
-						if(isset($_POST['prelievo'])){
-							header("location:prelievo.php");
-						}
-						else{
-							header("location:bonifico.php");
-						}
-					}
-				}
+
+
 			}
 			else
 			{
