@@ -56,7 +56,6 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 				$result = mysqli_query($conn, $sql2);
 				if(mysqli_num_rows($result) > 0 )
 				{
-					$numeroConti = mysqli_num_rows($result);
 					$i=0;
 					$j=1;
 					echo "<form method=post action=menu.php>";

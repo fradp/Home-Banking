@@ -38,6 +38,7 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 			session_start();
 			if(isset($_SESSION["username"]))
 			{
+				mysqli_query($conn, "START TRANSACTION");
 				if(!isset($_POST["btnVersamento"])){
 					echo"
 					<form method=post action=#>
@@ -46,8 +47,20 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 					</form>
 				";
 				}
-				else{
-					echo "*bestemmia*";
+				else {
+					//selezionare id e saldo del contocorrente
+					//recupera id da $_SESSION['name'] 
+
+					/*$sql2 = "UPDATE contocorrente SET Saldo = $nuovoSaldo WHERE ID_ContoCorrente = $ID";
+					if (mysqli_query($conn, $sql)) {
+					      echo "<script>alert(\"Versamento effettuato\");</script>";
+					      mysqli_query($conn, "COMMIT");
+					}
+					else {
+					  	$error="Error: " . $sql . "<br>" . mysqli_error($conn);
+					    echo "<script>alert(\"".$error."\");</script>";
+					    //header("location: insConcerto.php");
+					}*/
 				}
 
 			}

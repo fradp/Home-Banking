@@ -23,8 +23,6 @@
 	            if($username == $row["Username"] && $password == $row["Password"]){
 	            	$_SESSION['username'] = $username;	
 	            	$_SESSION['password'] = $password;
-	            	$_username = $_SESSION['username'];
-	            	$_password = $_SESSION['password'];
 	            	header("location: dashboard.php");
 	            }
 	            else

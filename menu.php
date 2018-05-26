@@ -39,6 +39,30 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 			if(isset($_SESSION["username"]))
 			{
 				if(!isset($_POST['versamento']) && !isset($_POST['prelievo']) && !isset($_POST['bonifico'])){
+
+					/* -------------------------------OPERAZIONE BRUTTA--------------------------------- */
+					foreach($_POST as $name => $content) {
+
+					}
+					/* --------------------------------------------------------------------------------- */
+
+					$_SESSION['name'] = $name;
+
+					$sql = "SELECT possiede.ID_ContoCorrente, contocorrente.Saldo FROM possiede INNER JOIN contocorrente ON possiede.ID_ContoCorrente=contocorrente.ID_ContoCorrente WHERE possiede.ID_ContoCorrente=$name";
+					$result = mysqli_query($conn, $sql);
+					$rows = mysqli_fetch_assoc($result);
+					if(mysqli_num_rows($result) > 0 )
+					{
+							$saldo = $rows["Saldo"];
+							echo "Saldo: " . $saldo . "<br>";
+					}
+					else
+					{
+						echo "0 results";
+					}
+					$_SESSION["saldo"] = $saldo;
+
+
 					echo "
 					<form method=post action=#>
 						<input type=submit value=Versamento name=versamento>
