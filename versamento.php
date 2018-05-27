@@ -43,24 +43,43 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 					echo"
 					<form method=post action=#>
 						<input type=text name=inputVersamento placeholder='Inserisci importo' required>
+						<input type=text name=inputPin placeholder='Inserisci pin' required>
 						<input type=submit name=btnVersamento value=Invia>
 					</form>
 				";
 				}
-				else {
-					//selezionare id e saldo del contocorrente
-					//recupera id da $_SESSION['name'] 
+				else{
+					$importo = $_POST["inputVersamento"];
+					$pin = $_POST["inputPin"];
+					$id = $_SESSION["name"]; //id del contocorrente selezionato
 
-					/*$sql2 = "UPDATE contocorrente SET Saldo = $nuovoSaldo WHERE ID_ContoCorrente = $ID";
-					if (mysqli_query($conn, $sql)) {
-					      echo "<script>alert(\"Versamento effettuato\");</script>";
-					      mysqli_query($conn, "COMMIT");
+					$sql = "SELECT Pin, Saldo FROM contocorrente WHERE ID_ContoCorrente = $id";
+					$result = mysqli_query($conn, $sql);
+					$rows = mysqli_fetch_assoc($result);
+					if(mysqli_num_rows($result) > 0 )
+					{
+						if($pin==$rows["Pin"])
+						{
+							$nuovoSaldo = $importo + $rows["Saldo"];
+							$sql2 = "UPDATE contocorrente SET Saldo = $nuovoSaldo WHERE ID_ContoCorrente = $id";
+							if (mysqli_query($conn, $sql2)) {
+							      echo "<script>alert(\"Versamento effettuato\");</script>";
+							      mysqli_query($conn, "COMMIT");
+							}
+							else {
+							  	$error="Error: " . $sql2 . "<br>" . mysqli_error($conn);
+							    echo "<script>alert(\"".$error."\");</script>";
+							}
+						}
+						else
+						{
+							echo "<script>alert('Il pin è errato!');</script>";
+						}
 					}
-					else {
-					  	$error="Error: " . $sql . "<br>" . mysqli_error($conn);
-					    echo "<script>alert(\"".$error."\");</script>";
-					    //header("location: insConcerto.php");
-					}*/
+					else
+					{
+						echo "0 results";
+					}
 				}
 
 			}
