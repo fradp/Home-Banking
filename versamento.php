@@ -36,10 +36,10 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 		{
 
 			session_start();
+			mysqli_query($conn, "START TRANSACTION");
 			if(isset($_SESSION["username"]))
 			{
-				mysqli_query($conn, "START TRANSACTION");
-				if(!isset($_POST["btnVersamento"])){
+				if(!isset($_POST["btnVersamento"]) && !isset($_SESSION["flag"])){
 					echo"
 					<form method=post action=#>
 						<input type=text name=inputVersamento placeholder='Inserisci importo' required>
@@ -49,36 +49,60 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 				";
 				}
 				else{
-					$importo = $_POST["inputVersamento"];
-					$pin = $_POST["inputPin"];
-					$id = $_SESSION["name"]; //id del contocorrente selezionato
+					if(!isset($_POST["btnConferma"]) && !isset($_POST["btnIndietro"])){
+						$importo = $_POST["inputVersamento"];
+						$pin = $_POST["inputPin"];
+						$id = $_SESSION["name"]; //id del contocorrente selezionato
 
-					$sql = "SELECT Pin, Saldo FROM contocorrente WHERE ID_ContoCorrente = $id";
-					$result = mysqli_query($conn, $sql);
-					$rows = mysqli_fetch_assoc($result);
-					if(mysqli_num_rows($result) > 0 )
-					{
-						if($pin==$rows["Pin"])
+						$sql = "SELECT Pin, Saldo FROM contocorrente WHERE ID_ContoCorrente = $id";
+						$result = mysqli_query($conn, $sql);
+						$rows = mysqli_fetch_assoc($result);
+						if(mysqli_num_rows($result) > 0 )
 						{
-							$nuovoSaldo = $importo + $rows["Saldo"];
-							$sql2 = "UPDATE contocorrente SET Saldo = $nuovoSaldo WHERE ID_ContoCorrente = $id";
-							if (mysqli_query($conn, $sql2)) {
-							      echo "<script>alert(\"Versamento effettuato\");</script>";
-							      mysqli_query($conn, "COMMIT");
+							if($pin==$rows["Pin"])
+							{
+								$nuovoSaldo = $importo + $rows["Saldo"];
+								$sql2 = "UPDATE contocorrente SET Saldo = $nuovoSaldo WHERE ID_ContoCorrente = $id";
+								if (mysqli_query($conn, $sql2)) {
+								      //echo "<script>alert(\"Versamento effettuato\");</script>";
+								      //mysqli_query($conn, "COMMIT");
+								}
+								else {
+								  	mysqli_query($conn, "ROLLBACK");
+								}
 							}
-							else {
-							  	$error="Error: " . $sql2 . "<br>" . mysqli_error($conn);
-							    echo "<script>alert(\"".$error."\");</script>";
+							else
+							{
+								mysqli_query($conn, "ROLLBACK");
 							}
 						}
 						else
 						{
-							echo "<script>alert('Il pin è errato!');</script>";
+							mysqli_query($conn, "ROLLBACK");
 						}
+
+						echo"
+							<form method=post action=#>
+								Vuoi confermare l'operazione?
+								<input type=submit name=btnConferma value=Conferma>
+								<input type=submit name=btnIndietro value=Indietro>
+							</form>
+						";
+
+						$_SESSION["flag"] = 1;
+												
 					}
 					else
 					{
-						echo "0 results";
+						if(isset($_POST["btnConferma"])){
+							mysqli_query($conn, "COMMIT");
+						}
+						else{
+							mysqli_query($conn, "ROLLBACK");
+							header("location:menu.php");
+							echo "ciiaiao";																			
+						}
+						unset($_SESSION["flag"]);
 					}
 				}
 
