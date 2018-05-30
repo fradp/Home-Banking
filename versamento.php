@@ -36,10 +36,11 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 		{
 
 			session_start();
-			mysqli_query($conn, "START TRANSACTION");
+
 			if(isset($_SESSION["username"]))
 			{
 				if(!isset($_POST["btnVersamento"]) && !isset($_SESSION["flag"])){
+					mysqli_query($conn, "START TRANSACTION");
 					echo"
 					<form method=post action=#>
 						<input type=text name=inputVersamento placeholder='Inserisci importo' required>
@@ -99,7 +100,7 @@ ogni operazione deve esere gestita con transazioni con la possibilita di poter a
 						}
 						else{
 							mysqli_query($conn, "ROLLBACK");
-							header("location:menu.php");
+							//header("location:menu.php");
 							echo "ciiaiao";																			
 						}
 						unset($_SESSION["flag"]);
